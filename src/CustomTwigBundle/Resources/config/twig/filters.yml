@@ -1,0 +1,35 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    CustomTwigBundle\Twig\Filter\TwigArrayFilters:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Filter\TwigDateDiff:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Filter\TwigFileGetContents:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Filter\TwigHrefFilters:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Filter\TwigImages:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Filter\TwigStringFilters:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Filter\TwigTextFilters:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Filter\TwigUnixToTime:
+        tags: [ 'twig.extension' ]
+
+
+
+
+
+

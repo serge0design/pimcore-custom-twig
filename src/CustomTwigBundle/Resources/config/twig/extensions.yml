@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    CustomTwigBundle\Twig\Extension\TwigBootstrapSvgIcon:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Extension\TwigEditmodeLinkToObject:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Extension\TwigLanguageSwitcher:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Extension\TwigQrCode:
+        tags: [ 'twig.extension' ]
+

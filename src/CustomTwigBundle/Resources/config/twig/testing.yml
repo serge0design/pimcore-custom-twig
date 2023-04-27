@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    CustomTwigBundle\Twig\Test\TwigTests:
+        tags: [ 'twig.extension' ]
+
+    CustomTwigBundle\Twig\Test\TwigBundleChecker:
+        tags: [ 'twig.extension' ]
+

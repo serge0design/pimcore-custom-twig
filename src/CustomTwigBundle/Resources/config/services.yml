@@ -1,0 +1,12 @@
+imports:
+    - { resource: twig/components.yml}
+    - { resource: twig/extensions.yml }
+    - { resource: twig/filters.yml }
+    - { resource: twig/testing.yml }
+    - { resource: twig/statements.yml }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
