@@ -1,0 +1,38 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigArrayFilters:
+        tags: [ 'twig.extension' ]
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigDateDiff:
+        tags: [ 'twig.extension' ]
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigFileGetContents:
+        tags: [ 'twig.extension' ]
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigFormatPrice:
+        tags: [ 'twig.extension' ]
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigHrefFilters:
+        tags: [ 'twig.extension' ]
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigImages:
+        tags: [ 'twig.extension' ]
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigStringFilters:
+        tags: [ 'twig.extension' ]
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigTextFilters:
+        tags: [ 'twig.extension' ]
+
+    SergeDesign\PimcoreCustomTwigBundle\Twig\Filter\TwigUnixToTime:
+        tags: [ 'twig.extension' ]
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+imports:
+    - { resource: twig/components.yml}
+    - { resource: twig/extensions.yml }
+    - { resource: twig/filters.yml }
+    - { resource: twig/testing.yml }
+    - { resource: twig/statements.yml }
