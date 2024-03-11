@@ -9,7 +9,7 @@ use Twig\Node\Node;
 class SwitchNode extends Node
 {
 
-    public function compile(Compiler $compiler)
+    final public function compile(Compiler $compiler): void
     {
         $compiler
             ->addDebugInfo($this)

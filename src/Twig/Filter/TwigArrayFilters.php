@@ -11,44 +11,43 @@ class TwigArrayFilters extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('twigFilterArrayFlip',
-                [$this, 'arrayFlip']),
-            new TwigFilter('twigFilterArrayReverse',
-                [$this, 'arrayReverse']),
-            new TwigFilter('twigFilterArrayShuffle',
-                [$this, 'arrayShuffle'])
+            new TwigFilter('twigFilterArrayFlip', [$this, 'arrayFlip']),
+            new TwigFilter('twigFilterArrayReverse', [$this, 'arrayReverse']),
+            new TwigFilter('twigFilterArrayShuffle', [$this, 'arrayShuffle'])
         ];
     }
 
-    public function arrayFlip(array $arr): iterable
+    /**
+     * Flips an array.
+     */
+    final public function arrayFlip(iterable $arr): array
     {
-        if (is_array($arr)) {
-            return array_flip($arr);
-        }
-        return $arr;
-    }
-
-    public function arrayReverse(array $arr): iterable
-    {
-        if (is_array($arr)) {
-            return array_reverse($arr);
-        }
-        return $arr;
+        return array_flip($this->iterableToArray($arr));
     }
 
     /**
-     * @param array|\Traversable $arr
+     * Reverses an array.
      */
-    public function arrayShuffle(array $arr): iterable
+    final public function arrayReverse(iterable $arr, bool $preserveKeys = false): array
     {
-        if (is_array($arr)) {
-            if ($arr instanceof \Traversable) {
-                $arr = iterator_to_array($arr, false);
-            }
-            shuffle($arr);
-            return $arr;
-        }
+        return array_reverse($this->iterableToArray($arr), $preserveKeys);
+    }
 
-        return $arr;
+    /**
+     * Shuffles an array.
+     */
+    final public function arrayShuffle(iterable $arr): array
+    {
+        $array = $this->iterableToArray($arr);
+        shuffle($array);
+        return $array;
+    }
+
+    /**
+     * Converts iterable to an array.
+     */
+    private function iterableToArray(iterable $iterable): array
+    {
+        return is_array($iterable) ? $iterable : iterator_to_array($iterable, true);
     }
 }

@@ -1,50 +1,61 @@
 <?php
-declare(strict_types=1);
 
 namespace SergeDesign\PimcoreCustomTwigBundle\Twig\Filter;
 
-use Pimcore\Model\Asset;
-use Twig\TwigFilter;
+use Pimcore\Model\Asset\Image;
 use Twig\Extension\AbstractExtension;
-use Pimcore\Model\Asset\Thumbnail\ImageThumbnailTrait;
+use Twig\TwigFilter;
 
 class TwigImages extends AbstractExtension
 {
-
-    use ImageThumbnailTrait;
-
-    public function getFilters(): array
+    final public function getFilters(): array
     {
         return [
-            new TwigFilter('twigFilterImgThumbnail', [$this, 'getImgThumbnail'], ['is_safe' => ['html']]),
-            new TwigFilter('twigFilterImgThumbConfig', [$this, 'getImgThumbConfig'], ['is_safe' => ['html']]),
-            new TwigFilter('twigFilterCssBgImg', [$this, 'getCssBgImg'], ['is_safe' => ['html']]),
+            new TwigFilter(
+                'twigFilterImgThumbnail',
+                [$this, 'getImgThumbnail'],
+                ['is_safe' => ['html']]
+            ),
+            new TwigFilter(
+                'twigFilterImgThumbConfig',
+                [$this, 'getImgThumbConfig'],
+                ['is_safe' => ['html']]
+            ),
+            new TwigFilter(
+                'twigFilterCssBgImg',
+                [$this, 'getCssBgImg'],
+                ['is_safe' => ['html']]
+            ),
         ];
     }
 
-    public function getImgThumbnail(
-        object $image,
+    final public function getImgThumbnail(
+        Image  $image = null,
         string $thumbnailName = null,
         string $cssClass = 'img-fluid',
         string $alt = '',
-        array  $attrData = [],
-    ): string|object
-    {
-        if ($image->getImage() instanceof Asset\Image) {
-            $attributes = ["class" => $cssClass, "alt" => $alt];
-            $array = array_merge($attributes, $attrData);
+        array  $attrData = []
+    ): string {
 
-            $img = $image->getThumbnail($thumbnailName)->getHtml(['imgAttributes' => $array]);
-            return $img;
+        $attributes = $this->mergeAttributes([
+            "class" => $cssClass,
+            "alt" => $alt
+        ], $attrData);
 
-        } else {
-
-            return $image;
+        if ($image instanceof Image) {
+            if ($thumbnailName) {
+                $thumbnail = $image->getThumbnail($thumbnailName);
+                if ($thumbnail) {
+                    return $thumbnail->getHtml(['imgAttributes' => $attributes]);
+                }
+            }
+            return '<img src="' . htmlspecialchars($image->getFullPath(), ENT_QUOTES, 'UTF-8') . '" ' . $this->htmlAttributes($attributes) . ' />';
         }
+        return '';
     }
 
-    public function getImgThumbConfig(
-        object $image,
+    final public function getImgThumbConfig(
+        Image  $image = null,
         string $cssClass = 'img-fluid',
         string $alt = '',
         int    $width = 250,
@@ -52,39 +63,60 @@ class TwigImages extends AbstractExtension
         int    $quality = 90,
         string $format = 'webp',
         array  $attrData = [],
-        bool   $aspectratio = true,
-    ): string|object
-    {
-        if ($image->getImage() instanceof Asset\Image) {
-            $attributes = ["class" => $cssClass, "alt" => $alt];
-            $array = array_merge($attributes, $attrData);
+        bool   $aspectratio = true
+    ): string {
 
-            $img = $image->getThumbnail([
-                "width" => $width,
-                "height" => $height,
-                "aspectratio" => $aspectratio,
-                "quality" => $quality,
-                "format" => $format
-            ])->getHtml(['imgAttributes' => $array]);
+        $attributes = $this->mergeAttributes([
+            "class" => $cssClass,
+            "alt" => $alt
+        ], $attrData);
 
-            return $img;
-        } else {
-            return $image;
+        $config = [
+            "width" => $width,
+            "height" => $height,
+            "aspectratio" => $aspectratio,
+            "quality" => $quality,
+            "format" => $format
+        ];
+
+        if ($image instanceof Image) {
+            $thumbnail = $image->getThumbnail($config);
+            if ($thumbnail) {
+                return $thumbnail->getHtml(['imgAttributes' => $attributes]);
+            }
         }
-    }
-
-    public function getCssBgImg(
-        object $image,
-        string $thumbnailName = null,
-    ): string
-    {
-        if ($image->getImage() instanceof Asset\Image) {
-            $thumb = $image->getThumbnail($thumbnailName);
-
-            return ' style="background-image: url(' . $thumb . ');" ';
-        }
-
         return '';
     }
 
+    final public function getCssBgImg(
+        Image  $image = null,
+        string $thumbnailName = null
+    ): string {
+
+        if ($image instanceof Image) {
+            $thumb = $image->getThumbnail($thumbnailName);
+            if ($thumb) {
+                $url = htmlspecialchars($thumb->getPath(), ENT_QUOTES, 'UTF-8');
+                return "style=\"background-image: url('{$url}');\"";
+            }
+        }
+        return '';
+    }
+
+    private function mergeAttributes(
+        array $default,
+        array $additional
+    ): array {
+        return array_merge($default, $additional);
+    }
+
+    private function htmlAttributes(
+        array $attributes
+    ): string {
+        $htmlParts = [];
+        foreach ($attributes as $key => $value) {
+            $htmlParts[] = htmlspecialchars($key, ENT_QUOTES, 'UTF-8') . '="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '"';
+        }
+        return implode(' ', $htmlParts);
+    }
 }

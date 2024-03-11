@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace SergeDesign\PimcoreCustomTwigBundle;
@@ -13,12 +12,12 @@ class PimcoreCustomTwigBundle extends AbstractPimcoreBundle
 
     public const PACKAGE_NAME = 'serge0design/pimcore-custom-twig';
 
-    protected function getComposerPackageName(): string
+    final protected function getComposerPackageName(): string
     {
         return self::PACKAGE_NAME;
     }
 
-    public function getPath(): string
+    final public function getPath(): string
     {
         return \dirname(__DIR__);
     }

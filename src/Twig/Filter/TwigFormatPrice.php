@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace SergeDesign\PimcoreCustomTwigBundle\Twig\Filter;
 
@@ -7,26 +8,28 @@ use Twig\TwigFilter;
 
 class TwigFormatPrice extends AbstractExtension
 {
-
-    public function getFilters(): array
+    final public function getFilters(): array
     {
         return [
-            new TwigFilter('twigFilterFormatPrice', [$this, 'formatPrice'])
+            new TwigFilter(
+                'twigFilterFormatPrice',
+                [$this, 'formatPrice']
+            )
         ];
     }
 
-    public function formatPrice(
-        int    $value,
-        string $prefix = '',
-        int    $decimals = 0,
-        string $decPoint = ".",
-        string $thousandSep = "'"): string
-    {
+    final public function formatPrice(
+        float  $value,
+        string $currencySymbol = '',
+        string $locale = 'en_US'
+    ): string {
+        $fmt = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
+        $formattedValue = $fmt->formatCurrency($value, $currencySymbol);
 
-        $value = number_format($value, $decimals, $decPoint, $thousandSep);
-        $return = ($prefix != '' ? $prefix . ' ' : '') . $value;
+        if (!empty($currencySymbol) && strpos($formattedValue, $currencySymbol) === false) {
+            $formattedValue = $currencySymbol . ' ' . $formattedValue;
+        }
 
-        return $return;
-
+        return $formattedValue;
     }
 }

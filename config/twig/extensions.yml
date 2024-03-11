@@ -1,21 +1,23 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
 
-    SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigBootstrapSvgIcon:
-        tags: [ 'twig.extension' ]
+  SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigBootstrapSvgIcon:
+    tags:
+      - { name: twig.extension }
 
-    SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigEditmodeLinkToObject:
-        tags: [ 'twig.extension' ]
+  SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigEditmodeLinkToObject:
+    tags:
+      - { name: twig.extension }
 
-    SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigLanguageSwitcher:
-        tags: [ 'twig.extension' ]
+  SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigLanguageSwitcher:
+    tags:
+      - { name: twig.extension }
 
-    SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigQrCode:
-        tags: [ 'twig.extension' ]
-
-    SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigSvgFun:
-        tags: [ 'twig.extension' ]
-
+  SergeDesign\PimcoreCustomTwigBundle\Twig\Extension\TwigQrCode:
+    arguments:
+      $translator: '@Pimcore\Translation\Translator'
+    tags:
+      - { name: twig.extension }

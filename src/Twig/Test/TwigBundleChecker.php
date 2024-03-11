@@ -1,36 +1,33 @@
 <?php
-
 declare(strict_types=1);
 
 namespace SergeDesign\PimcoreCustomTwigBundle\Twig\Test;
 
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TwigBundleChecker extends AbstractExtension
 {
+    private array $bundles;
 
-    protected $container;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(array $bundles)
     {
-        $this->container = $container;
+        $this->bundles = $bundles;
     }
 
-    public function getFunctions(): array
+    final public function getFunctions(): array
     {
         return [
-            new TwigFunction('twigTestBundleChecker', [$this, 'getBundleChecker']),
+            new TwigFunction(
+                'twigTestBundleChecker',
+                [$this, 'isBundleRegistered']
+            ),
         ];
     }
 
-    public function getBundleChecker(string $bundle): bool
-    {
-        return array_key_exists(
-            $bundle,
-            $this->container->getParameter('kernel.bundles')
-        );
+    final public function isBundleRegistered(
+        string $bundle
+    ): bool {
+        return array_key_exists($bundle, $this->bundles);
     }
-
 }

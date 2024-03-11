@@ -1,6 +1,12 @@
 ## Twig Filter Examples
 
-twigFilterArrayFlip:  
+test array
+
+```
+{% set array = ['apple', 'banana', 'cherry'] %}
+```
+
+twigFilterArrayFlip:<br>
 Exchanges all keys with their associated values in an array
 
 ```
@@ -9,7 +15,7 @@ Exchanges all keys with their associated values in an array
 {% endfor %}
 ```
 
-twigFilterArrayReverse:  
+twigFilterArrayReverse:<br>   
 Return an array with elements in reverse order
 
 ``` 
@@ -18,7 +24,7 @@ Return an array with elements in reverse order
 {% endfor %}
 ```
 
-twigFilterArrayShuffle  
+twigFilterArrayShuffle <br>  
 Return an array with elements in shuffled order
 
 ``` 
@@ -27,8 +33,8 @@ Return an array with elements in shuffled order
 {% endfor %}
 ```
 
-twigFilterPassedTimeToNow  
-usable for logins, orders, blogs, etc  
+twigFilterPassedTimeToNow<br>   
+usable for logins, orders, blogs, etc. <br>
 Outputs something like: Last Loggin ( 1day ago )
 
 ``` 
@@ -40,6 +46,16 @@ twigFilterFileGetContents
 
 ``` 
 {{ svgImagePath|twigFilterFileGetContents }}
+```
+
+Formatting currency output
+
+``` 
+    {% set productPrice = 1234.56 %} {# Example price #}
+    {% set currencySymbol = 'CHF' %} {# Currency code #}
+    {% set locale = 'de_CH' %} {# Locale for formatting #}
+    {# Using the twigFilterFormatPrice filter to format the price #}
+    {{ productPrice|twigFilterFormatPrice(currencySymbol, 2, locale) }}
 ```
 
 #### Image
@@ -63,6 +79,20 @@ Output inline Code: style="background-image: url('..');
 {{ pimcoreImage|twigFilterCssBgImg('thumbnailName') }}
 ```
 
+Usage:
+
+``` 
+{% set pimcoreImage = pimcore_image("pimcoreImage")  %}
+{% if editmode %}
+    {{ pimcoreImage|raw }}
+{% else %}
+    {% set pimcoreImage = pimcoreImage.image %}
+    {{ pimcoreImage|twigFilterImgThumbnail('thumbnailName', 'cssClass', 'altText', {"data-attr": "value"}) }}
+    {{ pimcoreImage|twigFilterImgThumbConfig('cssClass', 'altText', 100, 100, 100, 'png') }}
+    {{ pimcoreImage|twigFilterCssBgImg('contentimages') }}
+{% endif %}
+``` 
+
 #### String
 
 twigFilterGetMd5
@@ -80,13 +110,33 @@ twigFilterGetUniqid
 twigFilterStringNormalizer
 
 ``` 
-{{ "String"|twigFilterStringNormalizer }}
+{% set string = '~¨^?\'"/-+.,;() &äöüÄÖÜßÉéÈèÊêEeËëÀàÁáÅåaÂâÃãªÆæCcÇçCcÍíÌìÎîÏïÓóÒòÔôºÕõŒOoØøÚúÙùÛûUuUuŠšSsŽžÑñ¡¿Ÿÿ_:' %}
+{{ string|twigFilterStringNormalizer }}
+```
+
+twigFilterNormalizeFolderName
+
+``` 
+{% set string = '~¨^?\'"/-+.,;() &äöüÄÖÜßÉéÈèÊêEeËëÀàÁáÅåaÂâÃãªÆæCcÇçCcÍíÌìÎîÏïÓóÒòÔôºÕõŒOoØøÚúÙùÛûUuUuŠšSsŽžÑñ¡¿Ÿÿ_:' %}
+{{ string|twigFilterNormalizeFolderName }}
 ```
 
 twigFilterStrToLower
 
 ``` 
 {{ "String"|twigFilterStrToLower }}
+```
+
+twigFilterStrToUpper
+
+``` 
+ {{ "string"|twigFilterStrToUpper }}
+```
+
+twigFilterStrCapitalize
+
+``` 
+ {{ "string"|twigFilterStrCapitalize }}
 ```
 
 twigFilterTruncate
@@ -106,7 +156,7 @@ twigFilterWordwrap
 twigFilterHrefUrl
 
 ``` 
-{{ "https://url.com/"|twigFilterHrefUrl }} 
+ {{ "https://url.com/"|twigFilterHrefUrl('css_class', "_blank") }}
 ```
 
 twigFilterHrefEmail
@@ -127,11 +177,13 @@ twigFilterHrefWhatsApp
 {{ href|twigFilterHrefWhatsApp }}
 ```
 
-twigFilterHrefSocialMedia  
-based on Bootstrap Icons: https://icons.getbootstrap.com/
+twigFilterHrefSocialMedia <br>
+based on Bootstrap Icons: https://icons.getbootstrap.com/<br>
+r.i.p. twitter
 
 ``` 
-{{ href|twigFilterHrefSocialMedia }}
+{% set social = "https://twitter.com" %}
+{{ social|twigFilterHrefSocialMedia('twitter') }}
 ```
 
 #### Time

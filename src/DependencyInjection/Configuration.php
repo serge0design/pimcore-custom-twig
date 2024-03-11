@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace SergeDesign\PimcoreCustomTwigBundle\DependencyInjection;
 
@@ -10,9 +11,8 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder(): TreeBuilder
+    final public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('pimcore_custom_twig');
-        return $treeBuilder;
+        return new TreeBuilder('pimcore_custom_twig');
     }
 }

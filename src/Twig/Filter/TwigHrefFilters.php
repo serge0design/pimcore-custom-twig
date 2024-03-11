@@ -13,145 +13,120 @@ class TwigHrefFilters extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFilters(): array
+    final public function getFilters(): array
     {
         return [
-            new TwigFilter('twigFilterHrefUrl',
-                [$this, 'getHrefUrl'], ['is_safe' => ['html']]),
-            new TwigFilter('twigFilterHrefEmail',
-                [$this, 'getHrefEmail'], ['is_safe' => ['html']]),
-            new TwigFilter('twigFilterHrefPhone',
-                [$this, 'getHrefPhone'], ['is_safe' => ['html']]),
-            new TwigFilter('twigFilterHrefWhatsApp',
-                [$this, 'getHrefWhatsApp'], ['is_safe' => ['html']]),
-            new TwigFilter('twigFilterHrefSocialMedia',
-                [$this, 'getHrefSocialMedia'], ['is_safe' => ['html']]),
+            new TwigFilter(
+                'twigFilterHrefUrl',
+                [$this, 'getHrefUrl'],
+                ['is_safe' => ['html']]
+            ),
+            new TwigFilter(
+                'twigFilterHrefEmail',
+                [$this, 'getHrefEmail'],
+                ['is_safe' => ['html']]
+            ),
+            new TwigFilter(
+                'twigFilterHrefPhone',
+                [$this, 'getHrefPhone'],
+                ['is_safe' => ['html']]
+            ),
+            new TwigFilter(
+                'twigFilterHrefWhatsApp',
+                [$this, 'getHrefWhatsApp'],
+                ['is_safe' => ['html']]
+            ),
+            new TwigFilter(
+                'twigFilterHrefSocialMedia',
+                [$this, 'getHrefSocialMedia'],
+                ['is_safe' => ['html']]
+            ),
         ];
     }
 
-    public function getHrefUrl(
+    final public function getHrefUrl(
         string $url,
         string $class = '',
         string $target = '_blank'
-    ): string
-    {
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            $webLink = [];
-            $webLink[] .= '<a href="' . $url . '"';
-            $webLink[] .= $class != '' ? 'class="' . $class . '"' : '';
-            $webLink[] .= ' target="' . $target . '">';
-            $webLink[] .= str_replace(['http://', 'https://'], '', $url);
-            $webLink[] .= '</a>';
+    ): string {
 
-            return join($webLink);
-        } else {
+        $classAttribute = $class ? 'class="' . htmlspecialchars($class) . '"' : '';
+        $cleanUrl = htmlspecialchars($url);
+        $displayUrl = htmlspecialchars(str_replace(['http://', 'https://'], '', $url));
 
-            return $url;
-        }
+        return "<a href=\"{$cleanUrl}\" {$classAttribute} target=\"{$target}\">{$displayUrl}</a>";
     }
 
-    public function getHrefEmail(
+    final public function getHrefEmail(
         string $email,
         string $class = '',
         string $subject = '',
         string $body = '',
         string $cc = '',
         string $bcc = ''
-    ): string
-    {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-            $emailLink = [];
-            $emailLink[] .= '<a';
-            $emailLink[] .= $class != '' ? ' class="' . $class . '"' : '';
-            $emailLink[] .= ' href="' . $this->strToASCII('mailto:' . $email);
-            $emailLink[] .= $subject != '' ? '?subject=' . $subject : '';
-            $emailLink[] .= $body != '' ? '&body=' . $body : '';
-            $emailLink[] .= $cc != '' && filter_var($cc, FILTER_VALIDATE_EMAIL) ? '&cc=' . $this->strToASCII($cc) : '';
-            $emailLink[] .= $bcc != '' && filter_var($bcc, FILTER_VALIDATE_EMAIL) ? '&bcc=' . $this->strToASCII($bcc) : '';
-            $emailLink[] .= '">';
-            $emailLink[] .= $this->strToASCII($email);
-            $emailLink[] .= '</a>';
-
-            return join($emailLink);
-
-        } else {
-
-            return $email;
+    ): string {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return htmlspecialchars($email);
         }
+        $href = "mailto:" . urlencode($email);
+        $href .= $subject ? '?subject=' . urlencode($subject) : '';
+        $href .= $body ? ($subject ? '&' : '?') . 'body=' . urlencode($body) : '';
+        $href .= $cc ? ($subject || $body ? '&' : '?') . 'cc=' . urlencode($cc) : '';
+        $href .= $bcc ? ($subject || $body || $cc ? '&' : '?') . 'bcc=' . urlencode($bcc) : '';
+
+        $classAttribute = $class ? ' class="' . htmlspecialchars($class) . '"' : '';
+        $emailDisplay = htmlspecialchars($email);
+
+        return "<a href=\"{$href}\"{$classAttribute}>{$emailDisplay}</a>";
     }
 
-    public function getHrefPhone(
+    final public function getHrefPhone(
         string $phone,
         string $hrefPrefix = 'tel:',
         string $countryCode = '+41',
-    ): string
-    {
+    ): string {
         return $this->getPhoneBaseLink($phone, $hrefPrefix, $countryCode);
     }
 
-    public function getHrefWhatsApp(
+    final public function getHrefWhatsApp(
         string $phone,
         string $hrefPrefix = 'https://wa.me/',
         string $countryCode = '+41'
-    ): string
-    {
+    ): string {
         return $this->getPhoneBaseLink($phone, $hrefPrefix, $countryCode);
     }
 
-    public function getPhoneBaseLink(
+    final public function getPhoneBaseLink(
         string $phone,
         string $hrefPrefix,
         string $countryCode
-    ): string
-    {
-        $nrToSanitize = $phone;
-        $number = filter_var($nrToSanitize, FILTER_SANITIZE_NUMBER_INT);
+    ): string {
+        $sanitizedNumber = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
+        $sanitizedNumber = ltrim($sanitizedNumber, '0');
+        $fullNumber = $countryCode . $sanitizedNumber;
 
-        if (preg_match('/^[0-9]{10}+$/', $number)) {
-
-            $phoneLink = [];
-            $phoneLink[] .= '<a href="';
-            $phoneLink[] .= $this->strToASCII($hrefPrefix . $countryCode . ltrim($number, '0')) . '"';
-            $phoneLink[] .= (str_contains($hrefPrefix, 'https') ? ' target="_blank"' : '');
-            $phoneLink[] .= '>';
-            $phoneLink[] .= $this->strToASCII($phone);
-            $phoneLink[] .= '</a>';
-
-            return join($phoneLink);
-
-        } else {
-
-            return $phone;
+        if (!preg_match('/^\+[0-9]{10,}$/', $fullNumber)) {
+            return htmlspecialchars($phone);
         }
+
+        $href = $hrefPrefix . $fullNumber;
+        $phoneDisplay = htmlspecialchars($phone);
+        $target = str_contains($hrefPrefix, 'https') ? ' target="_blank"' : '';
+
+        return "<a href=\"{$href}\"{$target}>{$phoneDisplay}</a>";
     }
 
-    public function getHrefSocialMedia(
+    final public function getHrefSocialMedia(
         string $url,
         string $name = 'bootstrap'
-    ): string
-    {
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            $smLink = [];
-            $smLink[] .= '<a target="_blank" href="' . $url . '"';
-            $smLink[] .= 'class="sm-link ' . $name . '">';
-            $smLink[] .= (new TwigBootstrapSvgIcon)->getBootstrapSvgIcon($name);
-            $smLink[] .= '</a>';
-
-            return join($smLink);
-        } else {
-
-            return $url;
+    ): string {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            return htmlspecialchars($url);
         }
-    }
 
-    public function strToASCII(string $string): string
-    {
-        $output = '';
-        for ($i = 0; $i < strlen($string); $i++) {
-            $output .= '&#' . ord($string[$i]) . ';';
-        }
-        return $output;
-    }
+        $cleanUrl = htmlspecialchars($url);
+        $icon = (new TwigBootstrapSvgIcon())->getBootstrapSvgIcon($name); // Consider Dependency Injection
 
+        return "<a target=\"_blank\" href=\"{$cleanUrl}\" class=\"sm-link {$name}\">{$icon}</a>";
+    }
 }

@@ -1,5 +1,5 @@
 <?php
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace SergeDesign\PimcoreCustomTwigBundle\Twig\Filter;
 
@@ -8,29 +8,53 @@ use Twig\TwigFilter;
 
 class TwigFileGetContents extends AbstractExtension
 {
+    private string $assetsDirectory;
 
-    public function getFilters(): array
+    public function __construct(
+        private string $webRoot = PIMCORE_WEB_ROOT
+    ) {
+        $this->assetsDirectory = $this->webRoot . '/var/assets';
+    }
+
+    final public function getFilters(): array
     {
         return [
-            new TwigFilter('twigFilterFileGetContents',
-                [$this, 'getFileGetContents'], ['is_safe' => ['html']])
+            new TwigFilter(
+                'twigFilterFileGetContents',
+                [$this, 'getFileContents'],
+                ['is_safe' => ['html']]
+            )
         ];
     }
 
-    public function getFileGetContents(string $file): string
+    final public function getFileContents(string $file): string
     {
-        $relativPath = "/" . trim($file, '/');
-        $rootPath = PIMCORE_WEB_ROOT . $relativPath;
-        $assetPath = PIMCORE_WEB_ROOT . '/var/assets/' . $relativPath;
+        $filePath = $this->getFilePath($file);
 
-        if (is_file($rootPath)) {
-            return file_get_contents($rootPath);
+        if (is_file($filePath) && is_readable($filePath)) {
+            return file_get_contents($filePath);
         }
 
-        if (is_file($assetPath)) {
-            return file_get_contents($assetPath);
+        return '';
+    }
+
+    private function getFilePath(string $file): string
+    {
+        // Prevent directory traversal
+        $file = basename($file);
+
+        // Here you can add more checks, for example, file extension checks for added security
+        $assetPath = $this->assetsDirectory . '/' . trim($file, '/');
+        if (is_file($assetPath) && is_readable($assetPath)) {
+            return $assetPath;
         }
 
-        return $file;
+        // Fallback to checking in the web root if not found in assets
+        $rootPath = $this->webRoot . '/' . trim($file, '/');
+        if (is_file($rootPath) && is_readable($rootPath)) {
+            return $rootPath;
+        }
+
+        return '';
     }
 }

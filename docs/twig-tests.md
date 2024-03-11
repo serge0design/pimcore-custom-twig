@@ -10,7 +10,7 @@ Check if item is of MIME-Type image/svg+xml
 ```
 
 twigTestIsArray\
-Check if item is array
+Check if item is an array
 
 ``` 
 {% if item is twigTestIsArray %}
@@ -19,7 +19,7 @@ Check if item is array
 ```
 
 twigTestIsBoolean\
-Check if item is bool
+Check if item is of bool
 
 ``` 
 {% if item is twigTestIsBoolean %}
@@ -46,7 +46,7 @@ Check if item is countable
 ```
 
 twigTestIsDir\
-Check if item is directory
+Check if item is a directory
 
 ``` 
 {% if item is twigTestIsDir %}
@@ -55,7 +55,7 @@ Check if item is directory
 ```
 
 twigTestIsFloat\
-Check if item is float
+Check if item is of float
 
 ``` 
 {% if item is twigTestIsFloat %}
@@ -64,7 +64,7 @@ Check if item is float
 ```
 
 twigTestIsInt\
-Check if is int
+Check if is of int
 
 ``` 
 {% if item is twigTestIsInt %}
@@ -73,7 +73,7 @@ Check if is int
 ```
 
 twigTestIsNumeric\
-Check if is numeric
+Check if is of numeric
 
 ``` 
 {% if item is twigTestIsNumeric %}
@@ -82,7 +82,7 @@ Check if is numeric
 ```
 
 twigTestIsNull\
-Check if item is null
+Check if item is of null
 
 ``` 
 {% if item is twigTestIsNull %}
@@ -91,7 +91,7 @@ Check if item is null
 ```
 
 twigTestIsObject\
-Check if item is object
+Check if item is an object
 
 ``` 
 {% if item is twigTestIsObject %}
@@ -100,7 +100,7 @@ Check if item is object
 ```
 
 twigTestIsResource\
-Check if item is resource
+Check if item is a resource
 
 ``` 
 {% if item is twigTestIsResource %}
@@ -118,7 +118,7 @@ Check if item is scalar
 ```
 
 twigTestIsString\
-Check if item is string
+Check if item is a string
 
 ``` 
 {% if item is twigTestIsString %}

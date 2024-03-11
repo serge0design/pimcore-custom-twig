@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace SergeDesign\PimcoreCustomTwigBundle\Tokenparsers;
+namespace SergeDesign\PimcoreCustomTwigBundle\TokenParsers;
 
 use Twig\Error\SyntaxError;
 use Twig\Node\Node;
@@ -14,7 +15,7 @@ class SwitchTokenParser extends AbstractTokenParser
     /**
      * @inheritdoc
      */
-    public function getTag(): string
+    final public function getTag(): string
     {
         return 'switch';
     }
@@ -22,7 +23,7 @@ class SwitchTokenParser extends AbstractTokenParser
     /**
      * @inheritdoc
      */
-    public function parse(Token $token): SwitchNode
+    final public function parse(Token $token): SwitchNode
     {
         $lineno = $token->getLine();
         $parser = $this->parser;
@@ -44,9 +45,9 @@ class SwitchTokenParser extends AbstractTokenParser
 
         $expressionParser = $parser->getExpressionParser();
         $cases = [];
-        $end = false;
+        $end_switch = false;
 
-        while (!$end) {
+        while (!$end_switch) {
             $next = $stream->next();
 
             switch ($next->getValue()) {
@@ -76,14 +77,15 @@ class SwitchTokenParser extends AbstractTokenParser
                     break;
 
                 case 'endswitch':
-                    $end = true;
+                    $end_switch = true;
                     break;
                 default:
                     throw new SyntaxError(sprintf(
                         'Unexpected end of template.
                         Twig was looking for the following tags "case", "default", or "endswitch"
                         to close the "switch" block started at line %d)',
-                        $lineno), -1);
+                        $lineno
+                    ), -1);
             }
         }
 
@@ -97,7 +99,7 @@ class SwitchTokenParser extends AbstractTokenParser
      * @param Token $token
      * @return bool
      */
-    public function decideIfFork(Token $token): bool
+    final public function decideIfFork(Token $token): bool
     {
         return $token->test(['case', 'default', 'endswitch']);
     }
@@ -106,7 +108,7 @@ class SwitchTokenParser extends AbstractTokenParser
      * @param Token $token
      * @return bool
      */
-    public function decideIfEnd(Token $token): bool
+    final public function decideIfEnd(Token $token): bool
     {
         return $token->test(['endswitch']);
     }

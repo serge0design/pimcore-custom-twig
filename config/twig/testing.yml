@@ -1,14 +1,16 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
 
-    SergeDesign\PimcoreCustomTwigBundle\Twig\Test\TwigTests:
-        tags: [ 'twig.extension' ]
+  SergeDesign\PimcoreCustomTwigBundle\Twig\Test\TwigTests:
+    tags:
+      - { name: twig.extension }
 
-    SergeDesign\PimcoreCustomTwigBundle\Twig\Test\TwigBundleChecker:
-        tags: [ 'twig.extension' ]
-        arguments:
-            - '@service_container'
+  SergeDesign\PimcoreCustomTwigBundle\Twig\Test\TwigBundleChecker:
+    tags:
+      - { name: twig.extension }
+    arguments:
+      $bundles: '%kernel.bundles%'
 

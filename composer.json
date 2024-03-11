@@ -1,43 +1,44 @@
 {
-    "name": "serge0design/pimcore-custom-twig",
-    "license": "GPL-3.0-or-later",
-    "type": "pimcore-bundle",
-    "keywords": [
-        "pimcore",
-        "twig",
-        "Filter",
-        "Extension",
-        "Test"
-    ],
-    "description": "A collection of twig Extensions/Filters and Tests for Pimcore 11.",
-    "homepage": "https://github.com/serge0design/pimcore-custom-twig.git",
-    "authors": [
-        {
-            "name": "serge.design - Serge",
-            "email": "github@serge.design",
-            "homepage": "https://serge-design.ch",
-            "role": "Developer"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "SergeDesign\\PimcoreCustomTwigBundle\\": "src/"
-        }
-    },
-    "extra": {
-        "pimcore": {
-            "bundles": [
-                "SergeDesign\\PimcoreCustomTwigBundle\\PimcoreCustomTwigBundle"
-            ]
-        }
-    },
-    "require": {
-        "ext-intl": "*",
-        "ext-mbstring": "*",
-        "pimcore/pimcore": "^v11.1.0",
-        "symfony/ux-twig-component": "^2.7",
-        "twig/extra-bundle": "^3.5",
-        "twig/string-extra": "^3.5"
-    },
-    "require-dev": {}
+  "name": "serge0design/pimcore-custom-twig",
+  "license": "GPL-3.0-or-later",
+  "type": "pimcore-bundle",
+  "keywords": [
+    "pimcore",
+    "twig",
+    "Filter",
+    "Extension",
+    "Test"
+  ],
+  "description": "A collection of twig Extensions/Filters and Tests for Pimcore 11.",
+  "homepage": "https://github.com/serge0design/pimcore-custom-twig.git",
+  "authors": [
+    {
+      "name": "serge.design - Serge",
+      "email": "github@serge.design",
+      "homepage": "https://serge-design.ch",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "SergeDesign\\PimcoreCustomTwigBundle\\": "src/"
+    }
+  },
+  "extra": {
+    "pimcore": {
+      "bundles": [
+        "SergeDesign\\PimcoreCustomTwigBundle\\PimcoreCustomTwigBundle"
+      ]
+    }
+  },
+  "require": {
+    "ext-iconv": "*",
+    "ext-intl": "*",
+    "ext-mbstring": "*",
+    "pimcore/pimcore": "^v11.1.0",
+    "symfony/ux-twig-component": "^2.7",
+    "twig/extra-bundle": "^3.5",
+    "twig/string-extra": "^3.5"
+  },
+  "require-dev": {}
 }

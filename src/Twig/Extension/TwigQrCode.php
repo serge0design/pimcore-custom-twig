@@ -23,39 +23,40 @@ class TwigQrCode extends AbstractExtension
         $this->translator = $translator;
     }
 
-    public function getFunctions(): array
+    final public function getFunctions(): array
     {
         return [
-            new TwigFunction('twigExtensionQrImage',
-                [$this, 'getQrImg'], ['is_safe' => ['html']])
+            new TwigFunction(
+                'twigExtensionQrImage',
+                [$this, 'getQrImg'],
+                ['is_safe' => ['html']]
+            )
         ];
     }
 
-    public function getQrImg(
+    final public function getQrImg(
         string $qrData,
         int    $size = 150,
         int    $margin = 0,
         array  $qrColor = [0, 0, 0],
         array  $bgColor = [255, 225, 255]
-    ): string
-    {
+    ): string {
 
-        $qrImg = [];
-        $qrImg[] .= '<img class="img-fluid img-qr-code" ';
-        $qrImg[] .= 'src="' . $this->getQrData($qrData, $size, $margin, $qrColor, $bgColor)->getDataUri() . '" ';
-        $qrImg[] .= 'alt="' . $this->translator->trans("scan me") . '"/>';
+        $src = $this->getQrData($qrData, $size, $margin, $qrColor, $bgColor)->getDataUri();
+        $alt = $this->translator->trans("scan me");
 
-        return join($qrImg);
+        return <<<HTML
+            <img class="img-fluid img-qr-code" src="$src" alt="$alt"/>
+        HTML;
     }
 
-    public function getQrData(
+    final public function getQrData(
         string $data,
         int    $size,
         int    $margin,
         array  $qrColor,
         array  $bgColor
-    ): ResultInterface
-    {
+    ): ResultInterface {
         $writer = new SvgWriter();
         $qrCode = QrCode::create($data)
             ->setEncoding(new Encoding('UTF-8'))
